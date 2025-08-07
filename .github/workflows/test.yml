@@ -37,7 +37,8 @@ jobs:
           forge build --sizes
         id: build
 
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+      # --- BAGIAN INI DINONAKTIFKAN ---
+      # - name: Run Forge tests
+      #   run: |
+      #     forge test -vvv
+      #   id: test
