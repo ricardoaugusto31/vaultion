@@ -20,7 +20,7 @@ contract BoringVault is Auth {
     using FixedPointMathLib for uint256;
 
     //- STATE -//
-    
+
     /// @notice The underlying asset this vault holds.
     ERC20 public immutable asset;
     /// @notice The yield-generating strategy contract.
@@ -29,7 +29,7 @@ contract BoringVault is Auth {
     address public rewardManager;
     /// @notice The contract authorized to perform reallocations on behalf of users.
     address public allocator;
-    
+
     /// @notice Mapping of user addresses to their share balances.
     mapping(address => uint256) public userShares;
     /// @notice The total amount of shares issued by the vault.
@@ -105,7 +105,7 @@ contract BoringVault is Auth {
         asset.safeTransferFrom(msg.sender, address(this), amount);
 
         uint256 shares = totalShares == 0 ? amount : amount.mulDivDown(totalShares, totalAssetsBefore);
-        
+
         userShares[receiver] += shares;
         totalShares += shares;
 
@@ -126,13 +126,13 @@ contract BoringVault is Auth {
         require(shares > 0, "BoringVault: Shares must be > 0");
         require(receiver != address(0), "BoringVault: Receiver cannot be zero address");
         require(userShares[msg.sender] >= shares, "BoringVault: Insufficient shares");
-        
+
         if (rewardManager != address(0)) {
             IRewardManager(rewardManager).updateReward(address(this), msg.sender);
         }
 
         uint256 amount = shares.mulDivDown(totalAssets(), totalShares);
-        
+
         userShares[msg.sender] -= shares;
         totalShares -= shares;
 
@@ -142,7 +142,7 @@ contract BoringVault is Auth {
                 strategy.withdraw(amount - vaultBalance);
             }
         }
-        
+
         asset.safeTransfer(receiver, amount);
         emit Withdraw(msg.sender, amount, shares);
     }
@@ -166,7 +166,7 @@ contract BoringVault is Auth {
         }
 
         uint256 amount = shares.mulDivDown(totalAssets(), totalShares);
-        
+
         userShares[user] -= shares;
         totalShares -= shares;
 
@@ -176,13 +176,13 @@ contract BoringVault is Auth {
                 strategy.withdraw(amount - vaultBalance);
             }
         }
-        
+
         asset.safeTransfer(receiver, amount);
         emit Withdraw(user, amount, shares);
     }
 
     //- VIEW FUNCTIONS -//
-    
+
     /**
      * @notice Calculates the total amount of assets under management in the vault and its strategy.
      * @return The total value of assets.

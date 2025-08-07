@@ -15,11 +15,10 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC20} from "solmate/tokens/ERC20.sol";
 
 contract DeployAndConfigure is Script {
-    
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployer = vm.addr(deployerPrivateKey);
-        
+
         vm.startBroadcast(deployerPrivateKey);
 
         // --- Langkah 1: Deploy & Mint Semua Token ---
@@ -51,7 +50,7 @@ contract DeployAndConfigure is Script {
 
         // --- Langkah 5: Konfigurasi & Hubungkan Semuanya (tetap sama) ---
         console.log("\nConfiguring and Connecting Contracts...");
-        
+
         // 5a. Hubungkan Vault ke Strategi & Reward Manager
         console.log("Setting strategies and reward manager for vaults...");
         vaultUSDC.setStrategy(strategyUSDC);
@@ -59,7 +58,7 @@ contract DeployAndConfigure is Script {
         vaultUSDC.setRewardManager(address(rewardManager));
         vaultUSDT.setRewardManager(address(rewardManager));
         vaultVLTN.setRewardManager(address(rewardManager));
-        
+
         // 5b. Atur Reward Rates
         console.log("Setting reward rates in RewardManager...");
         rewardManager.setRewardRate(address(vaultUSDC), 0.1e18);
@@ -80,7 +79,7 @@ contract DeployAndConfigure is Script {
         console.log("Funding contracts...");
         // Kirim 1 Juta VLTN ke RewardManager untuk hadiah
         vltn.transfer(address(rewardManager), 1_000_000 * 1e18);
-        
+
         // Kirim 1 Juta USDC & USDT ke Allocator untuk likuiditas swap simulasi
         usdc.transfer(address(allocator), 1_000_000 * 1e18);
         usdt.transfer(address(allocator), 1_000_000 * 1e18);

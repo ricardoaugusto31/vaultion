@@ -21,11 +21,7 @@ contract VaultAllocator {
 
     event VaultRegistered(address indexed token, address indexed vault);
     event Reallocated(
-        address indexed user,
-        address indexed fromVault,
-        address indexed toVault,
-        uint256 fromAmount,
-        uint256 toAmount
+        address indexed user, address indexed fromVault, address indexed toVault, uint256 fromAmount, uint256 toAmount
     );
 
     constructor() {
@@ -67,7 +63,7 @@ contract VaultAllocator {
         uint256 fromAmount = (sharesToWithdraw * totalAssetsFromVault) / totalSharesFromVault;
 
         fromVault.withdrawForReallocation(msg.sender, sharesToWithdraw, address(this));
-        
+
         uint256 toAmount = _swap(toToken, fromAmount);
 
         IERC20(toToken).approve(toVaultAddr, toAmount);

@@ -37,7 +37,7 @@ contract RewardManager {
         require(msg.sender == admin, "RewardManager: Caller is not the admin");
         _;
     }
-    
+
     /// @dev Modifier to update a vault's reward accumulator before a state change.
     modifier updateRewardForVault(address vault) {
         rewardPerTokenStored[vault] = rewardPerToken(vault);
@@ -73,7 +73,7 @@ contract RewardManager {
     function pendingReward(address vault, address user) external view returns (uint256) {
         return _getPendingReward(vault, user);
     }
-    
+
     /**
      * @notice Allows a user to claim their accumulated rewards from a vault.
      * @param vault The address of the vault from which to claim rewards.
@@ -97,7 +97,7 @@ contract RewardManager {
         rewards[vault][user] = _getPendingReward(vault, user);
         userRewardPerTokenPaid[vault][user] = rewardPerTokenStored[vault];
     }
-    
+
     /**
      * @dev Internal function containing the core logic for calculating a user's pending rewards.
      */
@@ -109,7 +109,7 @@ contract RewardManager {
     }
 
     //- ADMIN FUNCTIONS -//
-    
+
     /**
      * @notice Sets the reward distribution rate for a vault.
      * @param vault The address of the vault.
@@ -119,7 +119,7 @@ contract RewardManager {
         rewardRatePerSecond[vault] = rate;
         emit RewardRateUpdated(vault, rate);
     }
-    
+
     /**
      * @notice Updates the administrative address.
      * @param newAdmin The address of the new admin.
@@ -129,7 +129,7 @@ contract RewardManager {
         emit AdminChanged(admin, newAdmin);
         admin = newAdmin;
     }
-    
+
     /**
      * @notice Allows the admin to withdraw unused reward tokens from the contract.
      * @param to The address to receive the tokens.
